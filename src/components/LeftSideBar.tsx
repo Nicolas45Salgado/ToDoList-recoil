@@ -1,10 +1,8 @@
-import React, { useId, useState, MouseEvent, KeyboardEvent } from "react";
-import styled from "styled-components";
 import Image from "next/image";
-
-import LogoDrc from "../../public/images/logo-drc.png";
-import { ITodo } from "../interfaces/Todo.interface";
+import React, { KeyboardEvent, useId, useState } from "react";
 import { useSetRecoilState } from "recoil";
+import styled from "styled-components";
+import LogoDrc from "../../public/images/logo-drc.png";
 import { TodoListAtom } from "../atoms/TodoList/TodoListAtom";
 
 const SidebarContainer = styled.div`
@@ -77,7 +75,7 @@ export default function LeftSideBarComponent(props: ILeftSideBarComponent) {
   const handleButtonClick = () => {
     setTodoList((prevTodoList) => [
       ...prevTodoList,
-      { text: todoText, id: inputId },
+      { text: todoText, id: Math.random().toString() },
     ]);
     setTodoText("");
   };

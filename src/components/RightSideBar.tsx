@@ -1,9 +1,8 @@
 import React, { useEffect, useId, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { SelectedTodoItemAtom } from "../atoms/TodoList/SelectedTodoItemAtom";
 import { TodoListAtom } from "../atoms/TodoList/TodoListAtom";
-import { ITodo } from "../interfaces/Todo.interface";
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -82,8 +81,11 @@ const DeleteButton = styled.button`
 interface IRightSideBarComponent {}
 
 export default function RightSideBarComponent(props: IRightSideBarComponent) {
-  const [selectedTodo, setSelectedTodo] = useRecoilState(SelectedTodoItemAtom);
+  const selectedTodo = useRecoilValue(SelectedTodoItemAtom);
+  const resetSelectedTodo = useResetRecoilState(SelectedTodoItemAtom);
+
   const setTodoList = useSetRecoilState(TodoListAtom);
+  const todoList = useRecoilValue(TodoListAtom);
 
   const [newText, setNewText] = useState<string>();
   const inputId = useId();
@@ -93,7 +95,7 @@ export default function RightSideBarComponent(props: IRightSideBarComponent) {
     setNewText(selectedTodo.text);
   }, [selectedTodo]);
 
-  const handleEditButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEditButtonClick = () => {
     if (!selectedTodo) return;
 
     setTodoList((prevTodoList) =>
@@ -104,14 +106,19 @@ export default function RightSideBarComponent(props: IRightSideBarComponent) {
         return t;
       })
     );
-    setSelectedTodo(null);
+    resetSelectedTodo();
   };
 
   const handleDeleteButtonClick = () => {
     if (!selectedTodo) return;
 
+    todoList.forEach((todoitem) => {
+      console.log(todoitem.id, selectedTodo.id);
+      console.log(todoitem.text, selectedTodo.text);
+    });
+
     setTodoList((prevTodo) => prevTodo.filter((t) => t.id !== selectedTodo.id));
-    setSelectedTodo(null);
+    resetSelectedTodo();
   };
 
   return (

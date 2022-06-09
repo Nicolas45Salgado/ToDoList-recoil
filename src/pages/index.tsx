@@ -21,9 +21,7 @@ const Home: NextPage = () => {
   return (
     <ScreenWrapper>
       <LeftSideBarComponent />
-
       <TodoListComponent />
-
       {selectedTodo && <RightSideBarComponent />}
     </ScreenWrapper>
   );
