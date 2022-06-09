@@ -85,9 +85,8 @@ export default function RightSideBarComponent(props: IRightSideBarComponent) {
   const resetSelectedTodo = useResetRecoilState(SelectedTodoItemAtom);
 
   const setTodoList = useSetRecoilState(TodoListAtom);
-  const todoList = useRecoilValue(TodoListAtom);
 
-  const [newText, setNewText] = useState<string>();
+  const [newText, setNewText] = useState<string>("");
   const inputId = useId();
 
   useEffect(() => {
@@ -101,7 +100,10 @@ export default function RightSideBarComponent(props: IRightSideBarComponent) {
     setTodoList((prevTodoList) =>
       prevTodoList.map((t) => {
         if (t.id === selectedTodo.id) {
-          return selectedTodo;
+          return {
+            id: selectedTodo.id,
+            text: newText,
+          };
         }
         return t;
       })
@@ -111,11 +113,6 @@ export default function RightSideBarComponent(props: IRightSideBarComponent) {
 
   const handleDeleteButtonClick = () => {
     if (!selectedTodo) return;
-
-    todoList.forEach((todoitem) => {
-      console.log(todoitem.id, selectedTodo.id);
-      console.log(todoitem.text, selectedTodo.text);
-    });
 
     setTodoList((prevTodo) => prevTodo.filter((t) => t.id !== selectedTodo.id));
     resetSelectedTodo();
